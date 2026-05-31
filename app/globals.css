@@ -10,6 +10,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-silkscreen: var(--font-silkscreen-family);
+  --font-play-the-game: var(--font-play-the-game-family);
 }
 
 body {
@@ -26,6 +28,6 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(247, 91, 30, 0.4);
   border-radius: 2px;
 }

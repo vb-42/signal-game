@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useEffect, type ReactNode } from "react";
 import { handleDeviceKeyDown, withDeviceClick } from "@/lib/deviceControls";
 import ButtonHints, { type DeviceHints } from "@/components/ButtonHints";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const ScreenOverlay = dynamic(() => import("./ScreenOverlay"), { ssr: false });
 
@@ -121,6 +122,7 @@ interface DeviceShellProps {
   label?: string;
   isLensOpen?: boolean;
   presentation?: "page" | "embedded";
+  crt?: boolean;
   hints?: DeviceHints;
   onA?: () => void;
   onB?: () => void;
@@ -135,6 +137,7 @@ export default function DeviceShell({
   label = "SIGNAL-12",
   isLensOpen = false,
   presentation = "page",
+  crt = true,
   hints,
   onA,
   onB,
@@ -154,6 +157,8 @@ export default function DeviceShell({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onA, onB, onUp, onDown, onLeft, onRight]);
 
+  const isMobile = useIsMobile();
+
   return (
     <div
       className={
@@ -163,11 +168,13 @@ export default function DeviceShell({
       }
     >
       <motion.div
+        role="group"
+        aria-label={label}
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
         className={isEmbedded ? "relative w-full max-w-3xl" : "relative w-full md:max-w-3xl"}
-        style={{ aspectRatio: '1024 / 900' }}
+        style={{ aspectRatio: `1024 / ${!isMobile ? 900 : 1800}` }}
       >
         {/* Right side buttons (outside bezel, desktop only) */}
         <div className="pointer-events-none absolute inset-y-0 z-30 hidden md:flex flex-col" style={{ right: "-4px", top: "58px" }}>
@@ -244,24 +251,28 @@ export default function DeviceShell({
                 boxShadow: '0px 0px 10px 1px rgba(255,255,255,0.5) inset',
               }}
             >
-              {/* Scanlines */}
-              <div className="pointer-events-none absolute inset-0 z-[11]" aria-hidden style={{
-                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.025) 1px, rgba(255,255,255,0.025) 2px)',
-                backgroundSize: '100% 2px',
-              }} />
-              {/* Vignette */}
-              <div className="pointer-events-none absolute inset-0 z-[11]" aria-hidden style={{
-                background: 'radial-gradient(70% 70%, transparent 55%, rgba(0,0,0,0.35) 100%)',
-              }} />
-              {/* CRT screen overlay */}
-              <ScreenOverlay
-                crtEnabled={true}
-                bloomEnabled={true}
-                bloomIntensity={0.6}
-                colorNum={8.0}
-                pixelSize={28.0}
-                curve={0.45}
-              />
+              {crt && (
+                <>
+                  {/* Scanlines */}
+                  <div className="pointer-events-none absolute inset-0 z-[11]" aria-hidden style={{
+                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 3px)',
+                    backgroundSize: '100% 3px',
+                  }} />
+                  {/* Vignette */}
+                  <div className="pointer-events-none absolute inset-0 z-[11]" aria-hidden style={{
+                    background: 'radial-gradient(70% 70%, transparent 55%, rgba(0,0,0,0.35) 100%)',
+                  }} />
+                  {/* CRT screen overlay */}
+                  <ScreenOverlay
+                    crtEnabled={true}
+                    bloomEnabled={true}
+                    bloomIntensity={0.6}
+                    colorNum={8.0}
+                    pixelSize={28.0}
+                    curve={0.45}
+                  />
+                </>
+              )}
               {/* Screen content */}
               <div className="relative z-10 flex h-full min-h-0 flex-col">
                 {children}

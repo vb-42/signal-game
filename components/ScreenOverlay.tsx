@@ -43,7 +43,13 @@ function BloomBridge({
   if (crtEnabled) {
     return (
       <EffectComposer>
-      <CRTEffect colorNum={4.0} pixelSize={2.0} blending={true} curve={.25} />
+      <CRTEffect
+        colorNum={4.0}
+        pixelSize={2.0}
+        blending={true}
+        curve={0.05}
+        scanlineStrength={0.1}
+      />
       <Bloom
         luminanceThreshold={22.4}
         luminanceSmoothing={.1}
@@ -87,7 +93,7 @@ export default function ScreenOverlay({
     <div
       ref={containerRef}
       className="absolute inset-0 z-30 overflow-hidden rounded-2xl"
-      style={{ mixBlendMode: "multiply", opacity: 0.85, pointerEvents: "none" }}
+      style={{ mixBlendMode: "multiply", opacity: 0.72, pointerEvents: "none" }}
     >
       <Canvas
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}

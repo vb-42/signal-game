@@ -707,7 +707,7 @@ export function startStreamingAmbient(initialLevel = 1): AmbientHandle {
     let currentBpm = getGameBpm(initialLevel);
 
     const master = ctx.createGain();
-    master.gain.value = 0;
+    master.gain.value = -10;
 
     const lpf = ctx.createBiquadFilter();
     lpf.type = "lowpass";

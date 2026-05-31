@@ -76,7 +76,7 @@ interface MockIconData {
   icon: React.ReactNode;
 }
 
-function DotPatternIcon({ rows }: { rows: string[] }) {
+export function DotPatternIcon({ rows }: { rows: string[] }) {
   const cell = 3;
   const gap = 0.9;
   const pitch = cell + gap;

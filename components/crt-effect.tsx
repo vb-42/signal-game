@@ -11,6 +11,7 @@ uniform float colorNum;
 uniform float pixelSize;
 uniform bool blending;
 uniform float curve;
+uniform float scanlineStrength;
 
 float random(vec2 c) {
   return fract(sin(dot(c.xy, vec2(12.9898, 78.233))) * 43758.5453);
@@ -98,8 +99,8 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     color.rgb *= maskColor;
   }
 
-  float lines = sin(uv.y * 2150.0 + time * 100.0);
-  color *= lines + 1.0;
+  float lines = sin(uv.y * 2150.0 + time * 100.0) * 0.5 + 0.5;
+  color *= mix(1.0 - scanlineStrength, 1.0, lines);
 
   vec2 edge = smoothstep(0.0, 0.02, curveUV) * (1.0 - smoothstep(1.0 - 0.02, 1.0, curveUV));
   color.rgb *= edge.x * edge.y;
@@ -114,12 +115,14 @@ class CRTEffectImpl extends Effect {
     pixelSize = 4.0,
     blending = true,
     curve = 0.25,
+    scanlineStrength = 0.12,
   } = {}) {
     const uniforms = new Map<string, THREE.Uniform>([
       ["colorNum", new THREE.Uniform(colorNum)],
       ["pixelSize", new THREE.Uniform(pixelSize)],
       ["blending", new THREE.Uniform(blending)],
       ["curve", new THREE.Uniform(curve)],
+      ["scanlineStrength", new THREE.Uniform(scanlineStrength)],
     ]);
 
     super("CRTEffect", fragmentShader, { uniforms });
