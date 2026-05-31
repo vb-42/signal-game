@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     return new Response("Missing or invalid text parameter", { status: 400 });
   }
 
-  const apiKey = process.env.ELEVENLABS_API_KEY;
+  const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
   if (!apiKey) {
     return new Response("ELEVENLABS_API_KEY not configured", { status: 500 });
   }

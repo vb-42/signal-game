@@ -57,7 +57,7 @@ function upsertSignal(
 }
 
 export async function POST(req: Request) {
-  const apiKey = process.env.INTERHUMAN_API_KEY;
+  const apiKey = process.env.INTERHUMAN_API_KEY?.trim();
   if (!apiKey) {
     return NextResponse.json({ error: "INTERHUMAN_API_KEY not configured" }, { status: 500 });
   }
