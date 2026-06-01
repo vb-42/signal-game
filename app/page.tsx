@@ -63,6 +63,7 @@ function resolveInitialPhase(): BootPhase {
 
 export default function HomePage() {
   const [phase, setPhase] = useState<BootPhase>(resolveInitialPhase);
+  const [powerBtnHovered, setPowerBtnHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const homeRef = useRef<HomeScreenHandle>(null);
   const router = useRouter();
@@ -199,18 +200,27 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ type: "spring", duration: 0.7, bounce: 0 }}
               className="absolute mx-auto w-full max-w-3xl"
+              style={{
+                perspective: "1200px",
+              }}
             >
-              <DeviceShell
-                presentation="embedded"
-                label={LANDING_DEMO_LABEL}
-                isLensOpen
-                crt={false}
-                hints={{ a: "Power", b: "Board" }}
-                onA={powerOnDevice}
-                onB={() => router.push("/leaderboard")}
+              <motion.div
+                animate={{ rotateX: powerBtnHovered ? -2 : 0, rotateY: powerBtnHovered ? 1 : 0 }}
+                transition={{ type: "spring", duration: 0.6, bounce: 0.1 }}
+                style={{ transformStyle: "preserve-3d" }}
               >
-                <LandingDeviceDemo />
-              </DeviceShell>
+                <DeviceShell
+                  presentation="embedded"
+                  label={LANDING_DEMO_LABEL}
+                  isLensOpen
+                  crt={false}
+                  hints={{ a: "Power", b: "Board" }}
+                  onA={powerOnDevice}
+                  onB={() => router.push("/leaderboard")}
+                >
+                  <LandingDeviceDemo />
+                </DeviceShell>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -222,7 +232,9 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={startPlaying}
-                className=" font-mono font-bold text-lg tracking-widest text-white inline-flex h-full cursor-pointer items-center justify-center px-8 py-4 no-underline rounded-[100px] bg-[#F75B1E] transition-transform duration-150 ease will-change-transform [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.02] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-px active:scale-[0.97] active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100"
+                onMouseEnter={() => setPowerBtnHovered(true)}
+                onMouseLeave={() => setPowerBtnHovered(false)}
+                className=" font-mono font-semibold text-lg tracking-widest text-white inline-flex h-full cursor-pointer items-center justify-center px-8 py-4 no-underline rounded-[100px] bg-[#F75B1E] transition-transform duration-150 ease will-change-transform [@media(hover:hover)_and_(pointer:fine)]:hover:scale-[1.02] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-px active:scale-[0.97] active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:scale-100 motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100"
                 style={{
                   background: "linear-gradient(rgb(39, 40, 47) 0%, rgb(13, 12, 15) 100%)",
                 }}
@@ -244,7 +256,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, ease: [0.2, 0, 0, 1] }}
               className="mb-16 text-center"
             >
-              <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl" style={{ textWrap: "balance" }}>
+              <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl" style={{ textWrap: "balance" }}>
                 A game that reads your non-verbal cues.
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-lg text-gray-500" style={{ textWrap: "pretty" }}>
@@ -262,8 +274,8 @@ export default function HomePage() {
                 transition={{ duration: 0.5, ease: [0.2, 0, 0, 1] }}
                 className="relative overflow-hidden rounded-3xl border-none bg-white p-8 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)] sm:col-span-2 lg:col-span-2 lg:row-span-2"
               >
-                <h3 className="text-2xl font-bold text-gray-900">12 social signals to master.</h3>
-                <p className="mt-2 max-w-sm text-base text-gray-500">
+                <h3 className="text-2xl font-semibold text-gray-900">12 social signals to master.</h3>
+                <p className="mt-2  text-base text-gray-500">
                   From confidence to confusion, agreement to frustration — each round challenges you with a different signal to perform.
                 </p>
                 <div className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-4">
@@ -287,9 +299,9 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.08, ease: [0.2, 0, 0, 1] }}
                 className="relative overflow-hidden rounded-3xl border-none bg-white p-8 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)]"
               >
-                <h3 className="text-2xl font-bold text-gray-900">Camera powered.</h3>
+                <h3 className="text-2xl font-semibold text-gray-900">Camera powered.</h3>
                 <p className="mt-2 text-base text-gray-500">
-                  Your webcam captures every micro-expression. Nothing leaves your device — privacy first.
+                  Your webcam captures every micro-expression in real time — analyzed by Interhuman AI.
                 </p>
                 <div className="mt-6 flex items-center justify-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
@@ -309,7 +321,7 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.16, ease: [0.2, 0, 0, 1] }}
                 className="relative overflow-hidden rounded-3xl border-none bg-white p-8 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)]"
               >
-                <h3 className="text-2xl font-bold text-gray-900">3 attempts each.</h3>
+                <h3 className="text-2xl font-semibold text-gray-900">3 attempts each.</h3>
                 <p className="mt-2 text-base text-gray-500">
                   Didn&apos;t nail it? You get two more tries per signal. Your best performance counts.
                 </p>
@@ -317,7 +329,7 @@ export default function HomePage() {
                   {[1, 2, 3].map((n) => (
                     <div
                       key={n}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 font-mono text-sm font-bold text-emerald-700 shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 font-mono text-sm font-semibold text-emerald-700 shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
                     >
                       {n}
                     </div>
@@ -327,31 +339,8 @@ export default function HomePage() {
             </div>
 
             {/* Second row — wide cards */}
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {/* Real-time AI */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: 0.06, ease: [0.2, 0, 0, 1] }}
-                className="relative overflow-hidden rounded-3xl border-none bg-white p-8 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)]"
-              >
-                <h3 className="text-2xl font-bold text-gray-900">Real-time AI feedback.</h3>
-                <p className="mt-2 text-base text-gray-500">
-                  Signals are detected live as you perform — see exactly what the AI picks up, as it picks it up.
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {["Confidence detected", "Hesitation spotted", "Agreement confirmed"].map((label) => (
-                    <span
-                      key={label}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-pink-400" />
-                      {label}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-1">
+
 
               {/* Leaderboard */}
               <motion.div
@@ -361,7 +350,7 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.12, ease: [0.2, 0, 0, 1] }}
                 className="relative overflow-hidden rounded-3xl border-none bg-white p-8 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06),0_2px_4px_0_rgba(0,0,0,0.04)]"
               >
-                <h3 className="text-2xl font-bold text-gray-900">Compete globally.</h3>
+                <h3 className="text-2xl font-semibold text-gray-900">Compete globally.</h3>
                 <p className="mt-2 text-base text-gray-500">
                   See how your signal game stacks up against other players on the leaderboard.
                 </p>
@@ -375,7 +364,7 @@ export default function HomePage() {
                       key={row.rank}
                       className="flex items-center gap-3 rounded-xl bg-white/80 px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
                     >
-                      <span className="font-mono text-sm font-bold text-sky-600 tabular-nums">{row.rank}</span>
+                      <span className="font-mono text-sm font-semibold text-sky-600 tabular-nums">{row.rank}</span>
                       <span className="flex-1 text-base font-medium text-gray-700">{row.name}</span>
                       <span className="font-mono text-sm text-gray-400 tabular-nums">{row.score}</span>
                     </div>
@@ -396,11 +385,11 @@ export default function HomePage() {
               transition={{ duration: 0.6, ease: [0.2, 0, 0, 1] }}
               className="mb-6 text-center"
             >
-              <p className="mb-3 font-mono text-sm font-bold uppercase tracking-[0.2em] text-[#F75B1E]">
+              <p className="mb-3 font-mono text-sm font-semibold uppercase tracking-[0.2em] text-[#F75B1E]">
                 Coming soon
               </p>
               <h2
-                className="text-4xl font-bold tracking-tight text-white sm:text-5xl"
+                className="text-4xl font-semibold tracking-tight text-white sm:text-5xl"
                 style={{ textWrap: "balance" }}
               >
                 What if every app could read the room?
@@ -605,7 +594,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl font-bold tracking-tight mb-3 font-mono"
+            className="text-5xl font-semibold tracking-tight mb-3 font-mono"
             style={{
               background: "linear-gradient(135deg, #f0f0ff 0%, #F75B1E 50%, #ec4899 100%)",
               WebkitBackgroundClip: "text",
@@ -636,14 +625,14 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => router.push("/onboarding")}
-              className="min-h-11 rounded-2xl bg-white px-5 py-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-black shadow-[0_16px_40px_rgba(255,255,255,0.14)] transition-transform active:scale-[0.96]"
+              className="min-h-11 rounded-2xl bg-white px-5 py-3 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_16px_40px_rgba(255,255,255,0.14)] transition-transform active:scale-[0.96]"
             >
               Start game
             </button>
             <button
               type="button"
               onClick={() => router.push("/leaderboard")}
-              className="min-h-11 rounded-2xl bg-white/[0.06] px-5 py-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-white/65 shadow-[0_0_0_1px_rgba(255,255,255,0.08)] transition-[transform,background-color] hover:bg-white/[0.09] active:scale-[0.96]"
+              className="min-h-11 rounded-2xl bg-white/[0.06] px-5 py-3 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-white/65 shadow-[0_0_0_1px_rgba(255,255,255,0.08)] transition-[transform,background-color] hover:bg-white/[0.09] active:scale-[0.96]"
             >
               Leaderboard
             </button>
