@@ -12,6 +12,7 @@ import LandingDeviceDemo, { LANDING_DEMO_LABEL } from "@/components/LandingDevic
 import RevealVideoCard from "@/components/RevealVideoCard";
 import { SIGNALS } from "@/lib/signals";
 import { playBootSound } from "@/lib/sounds";
+import SignalCarousel from "@/components/SignalCarousel";
 
 const NAV_DOT_PATTERNS: Record<string, string[]> = {
   Play: ["010000000", "011000000", "011100000", "011110000", "011111000", "011110000", "011100000", "011000000", "010000000"],
@@ -498,6 +499,32 @@ export default function HomePage() {
         </section>
 
         <RevealVideoCard />
+
+        {/* Signal carousel footer */}
+        <section className="relative z-10 bg-[#080810] px-5 py-20 lg:px-10 overflow-hidden">
+          <div className="mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease: [0.2, 0, 0, 1] }}
+              className="mb-4 text-center"
+            >
+              <p className="font-mono text-sm font-semibold uppercase tracking-[0.2em] text-white/30">
+                Browse signals
+              </p>
+            </motion.div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="h-[360px] overflow-hidden"
+          >
+            <SignalCarousel className="h-full" />
+          </motion.div>
+        </section>
       </main>
     );
   }
